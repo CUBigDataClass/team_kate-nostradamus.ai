@@ -7,19 +7,20 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-lg-10">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title-main" >Nostradamus.ai</h2>
+<div class="row" style="justify-content:center">
+    <div class="col-lg-12" style="justify-content:left">
+        <!-- <div class="card">
+            <div class="card-header"> -->
+                <!-- <h2 class="card-title-main" >Nostradamus.ai</h2> -->
+                <img src="/static/assets/img/logo.png" alt="Nostradamus.ai Logo" width="800px"></img>
             </div>
-            <div class="card-footer">
+        </div>
+        <div class="row" style="margin-left:150px">
+            <div class="card" style="width: 30rem;">
                     <button onclick="location.href = '/login';" name="login" class="btn btn-fill btn-primary" >Login</button>
                 Don't have an account? <a href="/register" class="text-primary">Create</a>
               </div>
-        </div>
     </div>
-</div>
 
 {% endblock content %}
 
