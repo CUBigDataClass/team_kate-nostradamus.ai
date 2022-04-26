@@ -1,48 +1,49 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Register {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
 
 
-    {% extends "layouts/base.html" %}
-
-    {% block title %} Register {% endblock %} 
-    
-    <!-- Specific Page CSS goes HERE  -->
-    {% block stylesheets %}{% endblock stylesheets %}
-    
-    {% block content %} 
-    
-    
-    <div class="row">
+<div class="row">
     <div class="col-12">
-        <div class="card card-chart">
+        <div class="card">
             <div class="card-header ">
                 <div class="row">
-                        <h1 class="card-title" id="aboutNostr">What is Nostradamus.ai</h1>
-                        <div class="card">
-                           
-                            <h3 class="card-body">     -  Nostradamus.ai was set up to be a live and continuous experiment.</h4>
-                            <h4 class="card-body"> 
-                                
-                                <p>     Thank you for checking out our project! We are Luis, Aaron, Kate, and Pearce. We wanted our project to serve as a rolling experiment capable of live-testing neural networks through time. </p>
-                                <p>     We wanted our application to not only test a given model and store these predictions, but also to cleanly display this data and make it available to anybody who might be interested.</p>
-
-                            </h4>
-
-                            <h3 class="card-body">     -  The experiment: </h4>
-                            <h4 class="card-body"> 
-                                
-                                <p>     We are taking all available daily historical data from the Cryptocompare.com API and storing it in our database. Then, we preprocess the data (Open, High, Low, Close to be used as features) and generate features corresponding to the following technical indicators: MACD, Stochastic RSI, Stochastic Oscillator, On-Balance Volume, and Average True Range. The previous indicators were used to introduce awareness of momentum, trend, volatility, and volume to the model. The last feature to be generated consists of a binary modulo timeseries sequence, which is expected to introduce better time-awareness to the model. The preprocessed data is then scaled using standard scaling and split in a rolling window fashion to train the model and predict the following "unseen" 14-day window of time. This process is scheduled to happen every 14 days, while the unprocessed data is scheduled to happen daily.</p>
-                               
-                            </h4>
-                        
-                        </div>
+                    <h2 class="card-title" > Welcome To Our Project</h2>
+                    <div class="card">
+                        <h2 class="card-category" id="aboutNostr" > About The Project</h2>
+                        <p class="card-body">Thank you for checking out our predictive algorithim! We are Luis, Aaron, Kate, and Pearce. Our project is a machine learning algorithm that predicts the prices of multiple cryptocurrency types such as etherium and bitcoin by using such concepts as tensor flow and has a massive database which is comprised of rows containing the prices of different cryptocurrency at different times which then uses these pieces of information to make a prediciton about what the next prices of these "coins" will be. Our project also has a second database which is structured as a relational model in order to store user profile information and other such bits of "user" information. Our database is mostly run by SQL and is queried by EJS and Jquery within our webpages and while it is not updated daily, we plan on implementing weekly updates to our information.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h2 class="card-category" id="aboutNostr" >What is Cryptocurrency?</h2>
+                        <p class="card-body">Cryptocurrency is a new concept that has gained great popularity over the last few years. The main reason for this popularity is the fact that it is a decentralized currency, in that it's value is freely decided by the public market. Businesses can pay individuals for lending them the processing power of their hardware to complete millions of very basic calculations per minute and for which these companies pay you in bitcoin (or some other accepted cryptocurrency).</p>
+                    </div>
+                    
                 </div>  
             </div>
         </div>
     </div>
 </div>    
+<!-- <h1>
 
+
+
+</h1>
+
+
+<p>
+
+Thank you for checking out our predictive algorithim! We are Luis, Aaron, Kate, and Pearce. Our project is a machine learning algorithm that predicts the prices of multiple cryptocurrency types such as etherium and bitcoin by using such concepts as tensor flow and has a massive database which is comprised of rows containing the prices of different cryptocurrency at different times which then uses these pieces of information to make a prediciton about what the next prices of these "coins" will be. Our project also has a second database which is structured as a relational model in order to store user profile information and other such bits of "user" information. Our database is mostly run by SQL and is queried by EJS and Jquery within our webpages and while it is not updated daily, we plan on implementing weekly updates to our information.
+
+
+</p> -->
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}{% endblock javascripts %}
-
