@@ -399,7 +399,7 @@ demo = {
         { length: Math.ceil((end - start + 1) / step) },
         (_, i) => i * step + start
       );
-      chart_labels=initializeArrayWithRange(59)
+      chart_labels=initializeArrayWithRange(83)
       var eth_pred_dataset = JSON.parse(document.getElementById("ethDataPred").dataset.gecode);
       var eth_act_dataset = JSON.parse(document.getElementById("ethDataAct").dataset.gecode);
       
