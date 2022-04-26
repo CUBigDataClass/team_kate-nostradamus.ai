@@ -35,6 +35,14 @@ class Users(db.Model, UserMixin):
     def __repr__(self):
         return str(self.username)
 
+    # @classmethod
+    # def update_model(id, username, email):
+    #     user = Users.get(Users.id == id)
+    #     if model is not None:
+    #       model.name = name
+    #       model.description = description
+    #       model.save() # 1
+    #       return note
 
 @login_manager.user_loader
 def user_loader(id):
