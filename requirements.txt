@@ -19,3 +19,6 @@ scipy==1.4.1
 tensorflow==2.2.0
 requests
 flask_apscheduler
+gunicorn==20.1.0
+python-dotenv
+
