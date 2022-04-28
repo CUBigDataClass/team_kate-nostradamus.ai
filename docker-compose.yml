@@ -13,7 +13,7 @@ services:
     restart: always
     image: "nginx:latest"
     ports:
-      - "$PORT"
+      - "85:85"
     volumes:
       - ./nginx:/etc/nginx/conf.d
     networks:
