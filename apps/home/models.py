@@ -110,7 +110,7 @@ def create_BTC_forecasts(*args, **kwargs):
 
     btc=BTC.query.all()
     btc=pd.DataFrame(BTC.toDICT(btc))
-    btc_preds = get_predictions(btc)
+    btc_preds = get_predictions(btc,'btc')
     curr_date = datetime.now()
     curr_time = time.mktime(curr_date.timetuple())
     
@@ -213,7 +213,7 @@ def create_ETH_forecasts(*args, **kwargs):
     eth=ETH.query.all()
     eth=pd.DataFrame(ETH.toDICT(eth))
 
-    eth_preds = get_predictions(eth)
+    eth_preds = get_predictions(eth,'eth')
     curr_date = datetime.now()
     curr_time = time.mktime(curr_date.timetuple())
     
@@ -314,7 +314,7 @@ def create_XMR_forecasts(*args, **kwargs):
     xmr=XMR.query.all()
     xmr=pd.DataFrame(XMR.toDICT(xmr))
 
-    xmr_preds = get_predictions(xmr)
+    xmr_preds = get_predictions(xmr,'xmr')
     curr_date = datetime.now()
     curr_time = time.mktime(curr_date.timetuple())
     
@@ -381,21 +381,21 @@ def biweekly_db_update():
 
         btc=BTC.query.all()
         btc=pd.DataFrame(BTC.toDICT(btc))
-        btc_preds = get_predictions(btc)
+        btc_preds = get_predictions(btc,'btc')
         row1=BTC_forecasts(time=curr_time, close_1=btc_preds[0], close_2=btc_preds[1], close_3=btc_preds[2], close_4=btc_preds[3], close_5=btc_preds[4], close_6=btc_preds[5], close_7=btc_preds[6], close_8=btc_preds[7], close_9=btc_preds[8], close_10=btc_preds[9], close_11=btc_preds[10], close_12=btc_preds[11], close_13=btc_preds[12], close_14=btc_preds[13])
         db.session.add(row1)
         db.session.commit()
         
         eth=ETH.query.all()
         eth=pd.DataFrame(ETH.toDICT(eth))
-        eth_preds = get_predictions(eth)
+        eth_preds = get_predictions(eth,'eth')
         row2=ETH_forecasts(time=curr_time, close_1=eth_preds[0], close_2=eth_preds[1], close_3=eth_preds[2], close_4=eth_preds[3], close_5=eth_preds[4], close_6=eth_preds[5], close_7=eth_preds[6], close_8=eth_preds[7], close_9=eth_preds[8], close_10=eth_preds[9], close_11=eth_preds[10], close_12=eth_preds[11], close_13=eth_preds[12], close_14=eth_preds[13])
         db.session.add(row2)
         db.session.commit()
 
         xmr=XMR.query.all()
         xmr=pd.DataFrame(XMR.toDICT(xmr))
-        xmr_preds = get_predictions(xmr)
+        xmr_preds = get_predictions(xmr,'xmr')
         row3=XMR_forecasts(time=curr_time, close_1=xmr_preds[0], close_2=xmr_preds[1], close_3=xmr_preds[2], close_4=xmr_preds[3], close_5=xmr_preds[4], close_6=xmr_preds[5], close_7=xmr_preds[6], close_8=xmr_preds[7], close_9=xmr_preds[8], close_10=xmr_preds[9], close_11=xmr_preds[10], close_12=xmr_preds[11], close_13=xmr_preds[12], close_14=xmr_preds[13])
         db.session.add(row3)
         db.session.commit()
@@ -467,8 +467,7 @@ def get_eth_data():
 
         json_preds.append({'x':idx ,'y':pred})
 
-    print(json_actuals)
-    print(json_preds)
+    
     return json.dumps(json_actuals),json.dumps(json_preds)
 
 def get_btc_data():
@@ -577,7 +576,7 @@ def get_xmr_data():
     
     return json.dumps(json_actuals),json.dumps(json_preds)
 
-def get_predictions(df):
+def get_predictions(df,name):
 
     import numpy as np
     import ta
@@ -748,15 +747,66 @@ def get_predictions(df):
 
     #_________________________________________________________________________________________________________________________
 
-    def build_model(in_window, out_window, num_features):
+    def build_model_eth(in_window, out_window, num_features):
         
         inputs = tf.keras.layers.Input(shape=(in_window, num_features))
         
         layer = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=False))(inputs)
         
-        layer =  tf.keras.layers.Dense(36, kernel_initializer='lecun_normal', activation='selu')(layer)
+        layer =  tf.keras.layers.Dense(40, kernel_initializer='lecun_normal', activation='selu')(layer)
 
-        layer =  tf.keras.layers.Dropout(0.4)(layer)
+        layer =  tf.keras.layers.Dropout(0.35)(layer)
+
+        outputs = tf.keras.layers.Dense(out_window)(layer)
+        
+        model =tf.keras.models.Model(inputs, outputs)
+        
+
+        #opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
+        opt = 'sgd'
+        
+        #loss = tf.keras.losses.Huber() 
+        loss = 'mean_squared_error'
+        
+        model.compile(optimizer=opt, loss=loss, metrics=['mape'])
+        
+        return model
+
+    def build_model_btc(in_window, out_window, num_features):
+        
+        inputs = tf.keras.layers.Input(shape=(in_window, num_features))
+        
+        layer = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=False))(inputs)
+        
+        layer =  tf.keras.layers.Dense(28, kernel_initializer='lecun_normal', activation='selu')(layer)
+
+        layer =  tf.keras.layers.Dropout(0.5)(layer)
+
+        outputs = tf.keras.layers.Dense(out_window)(layer)
+        
+        model =tf.keras.models.Model(inputs, outputs)
+        
+   
+        #opt = tf.keras.optimizers.Adam(learning_rate=0.0001)
+        opt = 'sgd'
+        
+        #loss = tf.keras.losses.Huber() 
+        loss = 'mean_squared_error'
+        
+        model.compile(optimizer=opt, loss=loss, metrics=['mape'])
+        
+        return model
+        
+
+    def build_model_xmr(in_window, out_window, num_features):
+        
+        inputs = tf.keras.layers.Input(shape=(in_window, num_features))
+        
+        layer = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64, return_sequences=False))(inputs)
+        
+        layer =  tf.keras.layers.Dense(28, kernel_initializer='lecun_normal', activation='selu')(layer)
+
+        layer =  tf.keras.layers.Dropout(0.35)(layer)
 
         outputs = tf.keras.layers.Dense(out_window)(layer)
         
@@ -774,14 +824,19 @@ def get_predictions(df):
         return model
         
         
-        
-        
-    model_dnn = build_model(in_window, out_window, num_features)
+    if name == 'eth':  
+        model_dnn = build_model_eth(in_window, out_window, num_features)
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
+    if name == 'btc':  
+        model_dnn = build_model_btc(in_window, out_window, num_features)
+
+    if name == 'xmr':  
+        model_dnn = build_model_xmr(in_window, out_window, num_features)
+
+    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=6)
 
     model_dnn.summary()
-    hist_simple = model_dnn.fit(x_train, y_train, epochs=45, batch_size=8, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
+    hist_simple = model_dnn.fit(x_train, y_train, epochs=60, batch_size=16, callbacks=[callback], shuffle=False, validation_data=(x_valid, y_valid))
 
 
     y_pred = model_dnn.predict(x_test)
